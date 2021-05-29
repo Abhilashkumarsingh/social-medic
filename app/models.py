@@ -25,7 +25,6 @@ class Account(db.Model, UserMixin):
 class MedicalCategory(db.Model):
     id = db.Column( db.Integer, primary_key=True, nullable=False)
     category_name = db.Column( db.String(), nullable=False, unique=True)
-
     medical_records = db.relationship( "MedicalRecord", backref="medical_category", lazy='dynamic') 
 
     @staticmethod

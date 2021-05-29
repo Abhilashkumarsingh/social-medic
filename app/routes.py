@@ -3,7 +3,7 @@ from werkzeug.utils import redirect
 from wtforms import validators
 from app import app, db
 from flask_login import login_user, login_required, current_user, logout_user
-from flask import render_template
+from flask import render_template, json
 from app.forms import RegisterForm, LoginForm, MedicalRecordForm
 from app.models import Account, MedicalCategory, MedicalRecord
 
@@ -34,11 +34,16 @@ def login():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    total = current_user.medical_records.count()
-    bangalorean_count = MedicalRecord.query.with_parent(current_user).filter_by(bangalorean="t").count()
-    non_bangalorean_count = total-bangalorean_count
-
-    return render_template("dashboard.html", current='dashboard', bangalorean_count=bangalorean_count, non_bangalorean_count=non_bangalorean_count, total=total)
+    total_records = MedicalRecord.query.count()
+    bangalorean_count = MedicalRecord.query.filter_by(bangalorean="t").count()
+    non_bangalorean_count = total_records-bangalorean_count
+    disease_category_data = []
+    for category in MedicalCategory.get_all_categories():
+        category_name = category.category_name
+        number_of_cases = category.medical_records.count()
+        disease_category_data.append( {"name": category_name, "data": number_of_cases})
+    disease_category_data = { "data": disease_category_data}
+    return render_template("dashboard.html", current='dashboard', bangalorean_count=bangalorean_count, non_bangalorean_count=non_bangalorean_count, total=total_records, disease_category_data=disease_category_data)
 
 @app.route("/add", methods=['POST', "GET"])
 @login_required
@@ -57,7 +62,7 @@ def add_medical_record():
             medical_category=medical_category, 
             bangalorean=form.bangalorean.data,
             record_owner=current_user)
-            
+        
         db.session.add(medical_record)
         db.session.commit()
         return redirect(url_for("dashboard"))

@@ -1,39 +1,55 @@
 {% extends "medical_base.html" %}
 {% block medical %}
 <div class='d-flex flex-row'>
-  <div id='chart' class='container'>
-  
-  </div>
+  {% if total != 0 %}
+      <div id='chart1' class='container border justify-content-center'>
+
+      </div>
+      <div id='chart2' class='container border'>
+
+      </div>
+  {% else %}
+        <img class='mx-auto w-100' src="{{url_for('static',filename='doctor_standing.svg')}}" alt="">
+
+  {% endif %}
 </div>
 <script>
-  const total = {{total}}
-  const bangaloreans = {{bangalorean_count}};
-  const non_bangaloreans = {{non_bangalorean_count}};
+  const total = {{ total }}
+  const bangaloreans = {{ bangalorean_count }};
+  const non_bangaloreans = {{ non_bangalorean_count }};
   const bp = bangaloreans * 100 / total;
-  const nbp = 100-bp;
+  const nbp = 100 - bp;
 
-  const el = document.getElementById('chart');
-  const data = {
-    categories: ['Patients'],
-    series: [
-      {
-        name: 'Bangalorean',
-        data: bp,
-      },
-      {
-        name: 'Non-Bangalorean',
-        data: nbp,
-      },
-    ],
-  };
-  const options = {
-    chart: { title: 'Patient Origin', width:500, height:500},
-    legend: { showCheckbox : false }
-  };
-  const legend = {
-    showCheckBox : false
+  function init() {
+    if (total != 0) {
+      piePlot()
+    }
   }
-  const chart = toastui.Chart.pieChart({ el, data, options});
 
+  function piePlot() {
+    const el = document.getElementById('chart1');
+    const data = {
+      categories: ['Patients'],
+      series: [
+        {
+          name: 'Bangalorean',
+          data: bp,
+        },
+        {
+          name: 'Non-Bangalorean',
+          data: nbp,
+        },
+      ],
+    };
+    const options = {
+      chart: { title: 'Patient Origin Distribution', width: 500, height: 500 },
+      legend: { showCheckbox: false }
+    };
+    const legend = {
+      showCheckBox: false
+    }
+    const chart = toastui.Chart.pieChart({ el, data, options });
+  }
+  init()
 </script>
 {% endblock %}

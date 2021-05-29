@@ -13,7 +13,7 @@ def index():
 
     if form.validate_on_submit():
         account = Account( email=form.email.data )
-        account.set_password( form.password.daMedicalRecorda )
+        account.set_password( form.password.data )
         db.session.add(account)
         db.session.commit()
         return redirect(url_for("login"))

@@ -1,0 +1,67 @@
+{% extends "medical_base.html" %}
+{% block medical %}
+<div class='container mt-3'>
+    <div class='col-2'></div>
+    <div class='col p-4 border border-primary rounded'>
+        <h1 class='display-1 mb-5 text-primary fw-bold'>
+            Medical Record
+        </h1>
+        <form method="POST">
+            {{form.hidden_tag()}}
+
+
+
+            <div class='row mb-4'>
+                <div class='col'>
+                    <div class='form-floating'>
+                        {{form.first_name(class='form-control', id='first_name', placeholder="First Name")}}
+                        <label for="first_name">
+                            {{form.first_name.label}}
+                        </label>
+                    </div>
+                </div>
+                <div class='col'>
+                    <div class='form-floating'>
+                        {{form.last_name(class='form-control', id='last_name', placeholder="Last name")}}
+                        <label for="last_name">
+                            {{form.last_name.label}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class='row mb-4'>
+                <div class='col'>
+                    <div class='form-floating'>
+                        {{form.disease(class='form-control', id='disease', placeholder="Disease")}}
+                        <label for="disease">
+                            {{form.disease.label}}
+                        </label>
+                    </div>
+                </div>
+                <div class='col'>
+                    <div class='form-floating'>
+                        {{form.medical_category(class='form-select', id='medical_category')}}
+                        <label for="medical_category">
+                            {{form.medical_category.label}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class=' form-check mb-4'>
+                <label for="form-check-label">
+                    Is Patient A Resident of Bangalore ?
+                </label>
+                {{form.bangalorean(class='form-check-input border border-primary')}}
+            </div>
+
+            <div>
+                {{form.submit(class='btn btn-primary btn-lg')}}
+            </div>
+
+        </form>
+    </div>
+    <div class='col-2'></div>
+</div>
+{% endblock %}

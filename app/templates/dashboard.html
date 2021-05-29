@@ -1,0 +1,39 @@
+{% extends "medical_base.html" %}
+{% block medical %}
+<div class='d-flex flex-row'>
+  <div id='chart' class='container'>
+  
+  </div>
+</div>
+<script>
+  const total = {{total}}
+  const bangaloreans = {{bangalorean_count}};
+  const non_bangaloreans = {{non_bangalorean_count}};
+  const bp = bangaloreans * 100 / total;
+  const nbp = 100-bp;
+
+  const el = document.getElementById('chart');
+  const data = {
+    categories: ['Patients'],
+    series: [
+      {
+        name: 'Bangalorean',
+        data: bp,
+      },
+      {
+        name: 'Non-Bangalorean',
+        data: nbp,
+      },
+    ],
+  };
+  const options = {
+    chart: { title: 'Patient Origin', width:500, height:500},
+    legend: { showCheckbox : false }
+  };
+  const legend = {
+    showCheckBox : false
+  }
+  const chart = toastui.Chart.pieChart({ el, data, options});
+
+</script>
+{% endblock %}
